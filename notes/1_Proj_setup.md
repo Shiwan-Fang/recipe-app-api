@@ -73,7 +73,7 @@
 4. Create proj Dockerfile and .dockerignore, find the comments inside the file.
 5. run `docker build .` to build the image.
 6. Create docker-compose.yaml file and then run `docker-compose build` to build the services.
-7. Linting.
+7. Linting. (will be wrapped in github action)
     - What's linting?
       - Tool to check code formatting
       - Highlights errors, typos, formatting issues
@@ -90,7 +90,7 @@
         ```bash
         docker-compose run --rm app sh -c "flake8"
         ```
-8. Testing 
+8. Testing (will be wrapped in github action)
    - Django test suite
    - setup ests per Django app
    - Run tests through Docker Compose
@@ -136,6 +136,62 @@
   - Can override the default command
   - Does **not automatically start other linked services** (unless `--service-ports` or `depends_on` used)
   - 💡 Think: “Run a single task or experiment in a container”
+
+
+## Docker Build vs Docker Compose Build
+
+### `docker build`
+- Reads the **Dockerfile directly**
+- You explicitly specify:
+  - Build context
+  - Dockerfile location
+  - Build arguments (`--build-arg`)
+- Used mainly for building **one image manually**
+
+💡 Think: *“I describe exactly how to build this image.”*
+
+---
+
+### `docker-compose build`
+- First reads **`docker-compose.yaml`**
+- Uses values defined under `build`, such as:
+  - `build.context`
+  - `build.dockerfile`
+  - `build.args`
+- Then executes the **Dockerfile** using those inputs
+- Commonly used for **multi-service applications**
+
+💡 Think: *“Docker Compose describes the build for me.”*
+
+---
+
+### Are the resulting images the same?
+- **Yes**, in most cases, the images are identical
+- **Only if** the following inputs are the same:
+  - Dockerfile
+  - Build context
+  - Build arguments
+  - Target stage / platform
+
+---
+
+### Why images can be different
+Docker images differ when **Docker Compose supplies different inputs** to the Dockerfile than `docker build` does.
+
+Common reasons:
+- Different `ARG` values (e.g. `DEV=true`)
+- Different build context
+- Different target stage
+- Different platform
+
+📌 The Dockerfile stays the same, but **its inputs change**, resulting in a different image.
+
+---
+
+### Key takeaway
+> `docker build` and `docker-compose build` both execute a Dockerfile.  
+> The image is the same **only when the Dockerfile and all build inputs are the same**.
+
 
 ### Volumes
 
