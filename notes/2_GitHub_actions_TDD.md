@@ -18,3 +18,5 @@ How?
   - Set trigger as push, meaning everytime we push the code to out github repo, it will trigger github actions
   - Add steps for running testing and linting
 - Configure DockerHub authentication. (Done in [project setup section](notes/1_Proj_setup.md))
+- Test GitHub actions
+  Head over to our git proj -> push our code in the terminal -> refresh the github action page

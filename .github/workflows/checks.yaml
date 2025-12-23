@@ -1,7 +1,7 @@
 --- # signifies that this is a YAML file
 name: Checks
 
-on:[push] # every time code is pushed to the repository, trigger this workflow
+on: [push] # every time code is pushed to the repository, trigger this workflow
 
 jobs:
   test-lint:
