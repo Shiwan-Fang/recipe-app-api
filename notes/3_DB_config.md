@@ -146,3 +146,22 @@ New timeline
    After running the command above, delete the `tests.py`, `views.py`, since we don't need it.
 2. Create a new dir `tests/`, add `__init__.py`.
 3. Head over to `app/app/settings.py`, add core into `INSTALLED_APPS` to make sure the app is installed in our proj
+
+***Write tests for wait_for_db command***
+1. Create the dirs and file under `.app/core/`. Bc of the dir structure, Django will detect this as a management command that will allow us to run python manage.py
+
+    ```
+    ├── app
+    │   ├── app/- # Django project itself
+    |   |
+    │   ├── app/core- 
+    |   |   ├── app/core/management/-
+    |   |   |   ├── __init__.py    
+    |   |   |   ├── app/core/management/command/-    
+    │   │   │   │   └── __init__.py
+    │   │   │   │   └── wait_for_db.py    
+    ```
+  Inside the wait_for_db.py, add minimun code we need for adding a Django management command.
+
+2. Add the unit test.
+   
