@@ -46,7 +46,7 @@ volumes:
 
 Find more instructions about Postgres on [it's dockerhub webpage](https://hub.docker.com/_/postgres).
 
-## database configuration with Django
+## Database configuration with Django
 ***Steps***
 
 ***1. Configure Django (tell Django how to connect)***
@@ -61,7 +61,7 @@ Find more instructions about Postgres on [it's dockerhub webpage](https://hub.do
     ```python
     DATABASES = {
       'default': {
-          'ENGINE': 'django.db.bakcend.postgresql',
+          'ENGINE': 'django.db.backends.postgresql',
           'HOST': os.environ.get('DB_HOST'),
           'NAME': os.environ.get('DB_NAME'),
           'USER': os.environ.get('DB_USER'),
@@ -122,4 +122,27 @@ Find more instructions about Postgres on [it's dockerhub webpage](https://hub.do
   - open the terminal, run `docker-compose build` to build the new image.
 
 
+## Fixing database race condition
+***Peoblem with Docker compose***
+Using `depends_on` ensures service starts, but doesn't ensure application is running. Here is an example timeline that Django app tries to connect ro Postgres, but failed since postgres is not ready to be connectted yet.
 
+![image](images/5_connect_timeline.png)
+
+Solution:
+- make Django "wai for db"
+  - check for database availability
+  - continue when database ready
+- create custom Django mangement command
+  
+New timeline
+
+![image](images/6_new_connect_timeline.png)
+
+***Create core app***
+1. Add a template app `core` to our project.
+   ```bash
+   docker-compose run --rm app sh -c "python manage.py startapp core"
+   ```
+   After running the command above, delete the `tests.py`, `views.py`, since we don't need it.
+2. Create a new dir `tests/`, add `__init__.py`.
+3. Head over to `app/app/settings.py`, add core into `INSTALLED_APPS` to make sure the app is installed in our proj
