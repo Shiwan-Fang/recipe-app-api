@@ -1,4 +1,5 @@
 services:
+
   app:
     build:
       context: .
@@ -10,3 +11,22 @@ services:
       - ./app:/app # mount the current directory to /app in the container, so changes are reflected immediately, no need to rebuild the container
     command: >
       sh -c "python manage.py runserver 0.0.0:8000"
+    environment: # the values here are for development only, do not use in production, and need mapping to the db service below to create the database connection
+      - DB_HOST=db
+      - DB_NAME=dev_db
+      - DB_USER=dev_user
+      - DB_PASS=changeme
+    depends_on: # will ensure that the db service is started before the app service
+      - db
+
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - dev-db-data:/var/lib/postgresql/data # use a named volume to persist database data
+    environment:
+      - POSTGRES_DB=dev_db
+      - POSTGRES_USER=dev_user
+      - POSTGRES_PASSWORD=changeme
+
+volumes:
+  dev-db-data: # no need to specify the name after the colon, docker-compose will store it automatically to the default location

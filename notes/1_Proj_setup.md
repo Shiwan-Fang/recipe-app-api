@@ -102,6 +102,27 @@
     docker-compose run --rm app sh -c "django-admin startproject app ."
     ```
     Since `/app` is bind mount(Two-way synchronization), after run the command above, the files appare immediately on the local file system.
+    Here is the new structure
+        ```
+    ├── app/
+    │  ├── app/
+    |  |   |
+    |  │   ├── __init__.py
+    |  |   |
+    |  │   └── asgi.py
+    |  |   |
+    |  │   └── settings.py
+    |  |   |
+    |  │   └── urls.py
+    |  |   |
+    |  │   └── wsgi.py        
+    |  |   |
+    |  └── .flake8
+    |  └── db.sqlite3
+    |  └── manage.py
+    ```
+
+
 10. Run proj
     ```bash
     docker-compose up

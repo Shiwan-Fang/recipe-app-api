@@ -42,7 +42,7 @@ How?
   - Or, create `tests/` subdir to split tests up
   - Keep in mind:
     - only use `tests.py` or `tests/` dir
-    - the name of test modules must start with test_
+    - test modules must start with test_
     - test dir must contain `__init__.py`
 
   #### Test classes
