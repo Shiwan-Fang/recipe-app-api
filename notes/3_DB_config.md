@@ -157,11 +157,60 @@ New timeline
     │   ├── app/core- 
     |   |   ├── app/core/management/-
     |   |   |   ├── __init__.py    
-    |   |   |   ├── app/core/management/command/-    
+    |   |   |   ├── app/core/management/commands/-    
     │   │   │   │   └── __init__.py
     │   │   │   │   └── wait_for_db.py    
     ```
   Inside the wait_for_db.py, add minimun code we need for adding a Django management command.
 
 2. Add the unit test.
-   
+   Create `test_commands.py` under `core/test/`
+
+3. Add wait_for_db command in `.app/core/wait_for_db.py`.
+
+Check the python files of the above two steps to find more explaination.
+
+## Overview of database migration
+- Django Object Relational Mapper(ORM)
+  - Abstraction layer between the data and the actually database
+    - Django handles database structure and changes, no need to write sql code, manually change the database tables etc.
+    - allows you to focus on python code
+    - allows you to use any database (within reason)
+- Using ORM
+  ![image](images/7_db_migration.png)
+- Models
+  - each model maps to a table
+  - models contain
+    - name
+    - fields
+    - other metadata
+    - custom python proj
+  - example:
+    ```python
+    class Ingredient(models.Model):
+        name = models.CharField(maxlength=255)
+        user = models.ForeignKey(
+          settings.AUTH_USER_MODEL,
+          on_delete=models.CASCADE,
+        )
+    ```
+  - Creating migrations
+    - ensure app is enabled in settings.py
+    - use Django CLI, `python manage.py makemigrations`
+  - Applying migrations
+    - use Django CLI, `python manage.py migrate`
+    - run it after waiting for database
+
+## Update docker compose and CI/CD for wait_for_db command
+- Updata `docker-compose.yaml`. Modify the command code of app service.
+  ```yaml
+      command: >
+      sh -c "python manage.py wait_for_db &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0:8000"
+  ```
+- Update CI/CD. Head over to `.github/workflows/checks.yaml`, modify the tset step to make sure we run wait_for_db before running the test, just so to make sure the db has started before running the test.
+  ```yaml
+      - name: Test
+        run: docker compose run --rm app sh -c "python manage.py wait_for_db && python manage.py test"
+  ```
