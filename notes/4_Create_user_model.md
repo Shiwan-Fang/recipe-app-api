@@ -167,3 +167,22 @@ To make sure all user have an email address. None or empty values are not accept
    - create a user by using `create_user` to aviod duplicate code
    - add extra flaggs like is_superuser and is_staff
 3. Run the test again, you should see the test passed.
+
+
+## Test user model
+`docker-compose up`
+http://127.0.0.1:8000 check if the page loads successfully
+
+![image](images/2_django_launch_page.png)
+
+head over to http://127.0.0.1:8000/admin, we should get the admin log in page
+
+![image](images/8_django_admin_login.png)
+
+run `docker-compose run --rm app sh -c "python manage.py createsuperuser"` to create a superuser, enter the email and password, here we use admin@example.com
+
+![image](images/9_create_superuser.png)
+
+go back to the login page and log in
+
+![image](images/10_django_admin.png)
