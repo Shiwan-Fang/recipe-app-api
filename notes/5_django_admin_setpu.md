@@ -58,3 +58,23 @@
 3. head over to the page http://127.0.0.1:8000/admin/core/user/. If you click admin@example.com, you will get a error, bc the default user change screen had some fields that we don't have in our custom user model yet.
    
    ![image](images/11_django_admin_user.png)
+
+   ![image](images/12_django_admin_user_issue.png)
+
+
+## Issue Fixing: support modifying users
+**Why**
+
+To fix the issue we encountered above
+
+**Steps**
+1. `core/tests/test_admin.py`
+   1. create a new method `test_edit_user_page`
+   2. get the url like http://127.0.0.1:8000/admin/core/user/1/change/, but the id changes by different user_id that we passed in
+   3. get the url after loging the test client
+   4. check page responce status
+   5. Run `docker-compose run --rm app sh -c "python manage.py test"`, it should be failed
+2. `core_admin.py`
+   1. import `from django.utils.translation import gettext_lazy as _`. It integrate django translation system, if you change the language of djang, this will make sure the change is implemented to anywhere you use the traslation shortcut `_`
+   2. add 3 fieldsets
+   3. set ladt_login read only
