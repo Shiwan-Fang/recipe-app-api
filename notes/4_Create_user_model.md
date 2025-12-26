@@ -153,3 +153,17 @@ To make sure all user have an email address. None or empty values are not accept
     raise ValueError('Users must have an email address')
    ```
 3. Run the test again, you should see the test passed.
+
+
+## Spice3: Add superuser support
+
+**Steps**
+1. Write test `test_create_superuser` in `test_models.py` under the class `ModelTests`:
+   - use the create_superuser method to crate a super user
+   - use `assertTrue` to check if the user is superuser and staff
+   - run the test `docker-compose run --rm app sh -c "python manage.py test"`, we should see the test failed. 
+2. Implement the functionality
+   - Create `create_superuser` func under `UserManager`
+   - create a user by using `create_user` to aviod duplicate code
+   - add extra flaggs like is_superuser and is_staff
+3. Run the test again, you should see the test passed.
