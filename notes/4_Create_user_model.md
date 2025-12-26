@@ -111,7 +111,6 @@ Cerate `.app/core/tests/test_models.py` file. Write a test, check the finished c
 
     - **How to fix it:**
         Delete the database volume so Django can rebuild migrations from scratch.
-
         ```bash
         docker-compose down --volumes
         docker-compose up --build
@@ -119,4 +118,10 @@ Cerate `.app/core/tests/test_models.py` file. Write a test, check the finished c
 
    2. run `python manage.py migrate`. This applies those migrations to the database (creates or alters tables). use it anytime you want the DB to match the code.
 
-## Noemalize email addresses
+## Normalize email addresses
+**Steps**
+1. Write test code in `test_models.py` under the class `ModelTests`:
+    - the rules of normalization: example "test@example.com"
+        - anything in the first part of the email "test" can have capitalization, the domain name "example.com" can not have any capitalizetion
+    - create some possible cases based on the rules above.
+    - run the test `docker-compose run --rm app sh -c "python manage.py test"`, we should see the test failed. 
