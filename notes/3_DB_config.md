@@ -139,7 +139,7 @@ New timeline
 ![image](images/6_new_connect_timeline.png)
 
 ***Create core app***
-1. Add a template app `core` to our project.
+1. Add a template app `core` to our project. This is an app that contains code used across the whole project.
    ```bash
    docker-compose run --rm app sh -c "python manage.py startapp core"
    ```
@@ -195,6 +195,7 @@ Check the python files of the above two steps to find more explaination.
         )
     ```
   - Creating migrations
+    - migration sync model changes to DB.
     - ensure app is enabled in settings.py
     - use Django CLI, `python manage.py makemigrations`
   - Applying migrations

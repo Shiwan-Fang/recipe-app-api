@@ -103,7 +103,7 @@
     ```
     Since `/app` is bind mount(Two-way synchronization), after run the command above, the files appare immediately on the local file system.
     Here is the new structure
-        ```
+    ```
     ├── app/
     │  ├── app/
     |  |   |
