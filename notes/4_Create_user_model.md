@@ -64,7 +64,7 @@ Cerate `.app/core/tests/test_models.py` file. Write a test, check the finished c
 ### Implement user model
 **Steps**
 1. `.app/core/` is an app that contains code used across the whole project. The custom user model belongs here because it’s a fundamental part of the system.
-2. Create user model and model manager in `models.py`:
+2. Create user model and model manager class in `models.py`:
    1. Imports:
       - models → Django’s database field types
       - AbstractBaseUser → gives password handling & authentication basics
@@ -170,19 +170,19 @@ To make sure all user have an email address. None or empty values are not accept
 
 
 ## Test user model
-`docker-compose up`
+1. Run `docker-compose up`
 http://127.0.0.1:8000 check if the page loads successfully
 
 ![image](images/2_django_launch_page.png)
 
-head over to http://127.0.0.1:8000/admin, we should get the admin log in page
+2. Head over to http://127.0.0.1:8000/admin, we should get the admin log in page
 
 ![image](images/8_django_admin_login.png)
 
-run `docker-compose run --rm app sh -c "python manage.py createsuperuser"` to create a superuser, enter the email and password, here we use admin@example.com
+3. Run `docker-compose run --rm app sh -c "python manage.py createsuperuser"` to create a superuser, enter the email and password, here we use admin@example.com
 
 ![image](images/9_create_superuser.png)
 
-go back to the login page and log in
+4. Go back to the login page and log in
 
 ![image](images/10_django_admin.png)

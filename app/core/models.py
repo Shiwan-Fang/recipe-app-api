@@ -3,10 +3,11 @@ Database models for the core application.
 """
 from django.db import models
 from django.contrib.auth.models import (
-    AbstractBaseUser, 
-    BaseUserManager, 
+    AbstractBaseUser,
+    BaseUserManager,
     PermissionsMixin,
     )
+
 
 class UserManager(BaseUserManager):
 
@@ -18,7 +19,7 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         return user
-    
+
     def create_superuser(self, email, password):
         """Create and return a superuser with the given email and password."""
         user = self.create_user(email, password)
@@ -26,7 +27,6 @@ class UserManager(BaseUserManager):
         user.is_staff = True
         user.save(using=self._db)
         return user
-
 
 
 class User(AbstractBaseUser, PermissionsMixin):
