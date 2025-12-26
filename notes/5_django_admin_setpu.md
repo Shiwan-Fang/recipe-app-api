@@ -38,7 +38,7 @@
       -  create one superuser and one regular user
       -  use superuser to login to the admin page
    3. `test_users_list`
-      - builds the URL for the user list page inside admin
+      - builds the URL for the user list page inside admin, reverse admin urls **"admin:core_user_changelist"** are found at this [website](https://docs.djangoproject.com/en/3.1/ref/contrib/admin/#reversing-admin-urls)
       - loads that page using the logged-in test client
       - checks that the page(html code) shows the user's name and email — meaning the admin UI is displaying user info properly
       - Django’s assertContains internally: Checks res.status_code == 200 -> Looks inside res.content -> Verifies that self.user.name appears in the HTML text
@@ -78,3 +78,20 @@ To fix the issue we encountered above
    1. import `from django.utils.translation import gettext_lazy as _`. It integrate django translation system, if you change the language of djang, this will make sure the change is implemented to anywhere you use the traslation shortcut `_`
    2. add 3 fieldsets
    3. set ladt_login read only
+   4. run the test again, it should pass
+3. run the container and head over to http://127.0.0.1:8000/admin/core/user/1/change/
+
+    ![image](images/13_django_modify_user.png)
+
+
+## Support create users
+**Steps**
+1. `core/tests/test_admin.py`
+   1. create a new method `test_create_user_page`
+   2. apply the same logic as `test_edit_user_page`, just the urls are different
+   3. Run `docker-compose run --rm app sh -c "python manage.py test"`, it should be failed
+2. `core_admin.py`
+   1. add add_fieldsets
+   2. run the test again, it should pass
+3. run the container and head over to http://127.0.0.1:8000/admin/core/user/1/change/
+    ![image](images/14_django_add_user.png)
