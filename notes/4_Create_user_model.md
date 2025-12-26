@@ -1,20 +1,19 @@
 # Create User Model
 **Section Summary**
 - Create a custom user model
-- Configure Django to user it 
+- Configure Django to use it 
 - Handle normalising email
 - Handle encrypting passwords
 
 
-## The Django user model overview
+## Create Initial User Model
+### The Django user model overview
 Django web applications access and manage data through Python objects referred to as models. Models define the structure of stored data, including the field types and possibly also their maximum size, default values, selection list options, help text for documentation, label text for forms, etc. The definition of the model is independent of the underlying database — you can choose one of several as part of your project settings. Once you've chosen what database you want to use, you don't need to talk to it directly at all — you just write your model structure and other code, and Django handles all the dirty work of communicating with the database for you.
-
 
 **Django authentication**
 - build in suthentication system
 - framework for basic features: regisgration, login, auth
 - integrates with Django admin
-  
 
 **Django user model**
 - A model in Django is a Python class that defines the structure of a database table.
@@ -28,7 +27,6 @@ Django web applications access and manage data through Python objects referred t
 - have default user model, but not easy to customise & using username instead of email login
 - create a custom model for new projects, allows for using email instead of username login
 
-
 **How to customise Django user model**
 1. create model 
    - `AbstractBaseUser` : provides features for authentication, doesn't include fields
@@ -37,25 +35,19 @@ Django web applications access and manage data through Python objects referred t
 3. set `AUTH_USER_MODEL` in settings.py
 4. create and run migrations
 
-
 **Common issues when customising Django user model**
 - Running migrations before setting custom model
 - typos in config (doesn't really give you an error, hard to debug)
 - indentation in manager or model
-  
 
-## Design custom user model
+
+### User Model design
 **user fields**
 - email (EmailField)
 - name (CharField)
 - is_active (BooleanField)
 - is_staff (BooleanField)
 
-**user model manager**
-- used to mange objects
-- custom logic for creating objects (hash password)
-- Used by Django CLI (craete super user)
-  
 **user model manager**
 - Base class for managing users
 - useful helper methods
@@ -65,12 +57,11 @@ Django web applications access and manage data through Python objects referred t
   - `creatw_superuser`: used by the CLI to create superuser (admin)
 
 
-## Add user model test
+### Add user model test
 Cerate `.app/core/tests/test_models.py` file. Write a test, check the finished code and note in the file.
 
 
-## Implement user model
-
+### Implement user model
 **Steps**
 1. `.app/core/` is an app that contains code used across the whole project. The custom user model belongs here because it’s a fundamental part of the system.
 2. Create user model and model manager in `models.py`:
@@ -118,10 +109,47 @@ Cerate `.app/core/tests/test_models.py` file. Write a test, check the finished c
 
    2. run `python manage.py migrate`. This applies those migrations to the database (creates or alters tables). use it anytime you want the DB to match the code.
 
-## Normalize email addresses
+
+## Spice1: Normalize email addresses
+**Why do we need to normalize the email address?**
+
+to make sure different variations of the same email are treated as the same user and to keep the database consistent.
+
 **Steps**
-1. Write test code in `test_models.py` under the class `ModelTests`:
+1. Write test `test_new_user_email_normalized` in `test_models.py` under the class `ModelTests`:
     - the rules of normalization: example "test@example.com"
         - anything in the first part of the email "test" can have capitalization, the domain name "example.com" can not have any capitalizetion
     - create some possible cases based on the rules above.
     - run the test `docker-compose run --rm app sh -c "python manage.py test"`, we should see the test failed. 
+2. Implement the feature
+   - open up `models.py`
+   - use the `normalize_email()` method of BaseUserManager, which Normalizes email addresses by lowercasing the domain portion of the email address. Set it in the func `create_user`
+3. Run the test again, you should see the test passed.
+
+
+## Spice2: Require email input
+
+**Why do we need to require email input?**
+
+To make sure all user have an email address. None or empty values are not accepted.
+
+**Steps**
+1. Write test `test_new_user_without_email_raises_error` in `test_models.py` under the class `ModelTests`:
+   - use `with` statement, the context manager
+   - Python runs the create_user line.
+   - It raises ValueError("some message").
+   - Python calls `assertRaises.__exit__` with:
+   ```python
+   exc_type = ValueError
+   exc_value = ValueError("some message")
+   traceback = <traceback object pointing to create_user call>
+   ```
+   - assertRaises checks if exc_type matches the expected ValueError. If yes → test passes.
+   - run the test `docker-compose run --rm app sh -c "python manage.py test"`, we should see the test failed. 
+  
+2. Implement the feature, check and raise an exception.
+   ```python
+    if not email:
+    raise ValueError('Users must have an email address')
+   ```
+3. Run the test again, you should see the test passed.
