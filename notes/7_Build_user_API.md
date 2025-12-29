@@ -175,3 +175,18 @@
   - `test_retrieve_profile_success`: Test retrieving profile for logged in and authenticated user
   - `test_post_me_not_allowed`: Test http POST method is not allowed for the me endpoint. Http POST should only be used when **creating** obj in the system. This api is used for modifying users
   - `test_update_user_profile`: Test updating the user profile by authenticated user
+- Run `docker-compose run --rm app sh -c "python manage.py test"`, it should be failed
+  
+
+### Implement Manage User API
+- head over to `app/user/serializers.py`
+  - add a new method `update` under class `UserSerializer` when it's called to update the user 
+    - pop (get and remove) the password data from validated_data dictionary, password is optional, default to none
+    - call the method `update` from the base class `serializers.ModelSerializer` to update the model instance with validated data(only email and name, fields password has already been popped out)
+    - if user specify the password for the update, then encrypts password and saves it.
+- add `ManageUserView` in `/app/user/view.py`
+  - `authentication_classes`: how do you know the user is the user they say they are
+  - `permisssion_classes`: we know who the user is, what is that paticular user is allowe to do in our system. in here we want to make sure the user using the api is authenticated.
+  - overwrite the `get_object`, reriving the user that attached to the request
+- define the user/me api in `/app/user/urls.py`
+- Run `docker-compose run --rm app sh -c "python manage.py test"`, it should be passes
