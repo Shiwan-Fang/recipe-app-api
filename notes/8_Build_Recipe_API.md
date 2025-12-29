@@ -45,6 +45,8 @@ All the features will be availble for the recipe of the authenticated user
 
 
 ## Build Recipe Model
+to store the recipe data
+
 ### Write test for recipe model
 - `app/core/tests/test_models.py`, the core app is where we store all shared methods over all apps
   - import `from decimal import Decimal`, used for storing price for recipe obj, accuate: integer > decimal > floats
@@ -76,13 +78,54 @@ All the features will be availble for the recipe of the authenticated user
 | `python manage.py makemigrations` | Make Migrations | Prepare changes | Scans model changes and **creates migration files** (but does *not* touch the database) | Whenever you **add, remove, or modify fields/models** |
 | `python manage.py migrate` | Apply Migrations | Execute changes | Reads migration files and **updates the database schema** (creates tables, adds columns, etc.) | After `makemigrations`, or when setting up a new project or pulling changes |
 
+
+## Create Recipe App
+- Run `docker-compose run --rm app sh -c "python manage.py startapp recipe"` in the terminal to create a new app - user inside our django proj. Here is the new structure:
+```
+    ├── app/
+    │  ├── app/
+    |  └── core/
+    |  └── user/   
+    |  └── recipe/      
+    |  └── .flake8
+    |  └── manage.py
+```
+- Inside user/, remove `migrations/`, `admin.py`, `models.py`, since we are gonna keep all the three in core app
+- remove `tests.py`. And create `tests/` instead, do not forget create `__init__.py` inside it
+- add this new user app to `INSTALLED_APPS` at `.app/app/settings.py`
+
+
 ## Build Recipe Listing API
+### Write test for Recipe Listing API
+create `test_recipe_api.py`.
+- a helper function `create_recipe` to create a defaul recipe, and also allows us to override the values if we do need the changes for tests. `**params` , which will be a dictionary of all of the different parameters that was passed to the create recipe function.
+- define the unauthenticated test class `PublicRecipeAPITests`
+  - mothed `test_auth_required`, only logged in users can use the recipe
+- define the authenticated test class `PrivateRecipeAPITests`
+  - create an user and login to the api in `setUp`
+  - `test_retrieve_recipes`
+    - create 2 recipies
+    - get the url response, `res` is the response object returned from calling the API, `res.dat`a` is the JSON-decoded content of the response, as returned by the DRF view.
+    - retrive and sort the recipes from api, we will get a QuerySet of Recipe objects retrieved directly from the database.
+    - pass in the recipes we got above to the serializer to converts Django model instances(QuerySet) into a Python data structure (dict/list) suitable for JSON responses. pass in `many=True` here bc serializer is can either return a detail which is just one item, or we can return a list of items. And when you pass in many equals, true tells it that we want to pass in a list of items.
+    - assert the data
+    
+    ![image](images/24_recipe_serilizer.png)
+
+    - `test_recipes_limited_to_user` check if it only return the recipes created by the current logged in user 
+      - strucure is similar to the previous one
+      - create 2 recipes by 2 users
+      - retrive all the data from db, and filter it by one user, and then serilizer it
+      - check the data and if the number of the retrived data is 1.
 
 
 ## Build Recipe Detail API
 
 
+
 ## Build Recipe Creating API
 
 
+
 ## Test recipe API in browser
+
