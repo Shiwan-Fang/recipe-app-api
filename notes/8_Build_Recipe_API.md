@@ -115,12 +115,29 @@ create `test_recipe_api.py`.
     - `test_recipes_limited_to_user` check if it only return the recipes created by the current logged in user 
       - strucure is similar to the previous one
       - create 2 recipes by 2 users
-      - retrive all the data from db, and filter it by one user, and then serilizer it
+      - retrive all the data from db, and filter it by one user, and then serializer it
       - check the data and if the number of the retrived data is 1.
+- run `docker-compose run --rm app sh -c "python manage.py test"`, it should be failed
+
+### Implement Recipe Listing API
+- create `app/recipe/serializers.py`
+  - import `from rest_framework import serializers`, serializer is simply a way to convert objects to and from python objects. It takes a json input that might be posted from the API and validates the input to make sure it is secure and correct as part of validation rules. And then it converts it to either a python object that we can use or a model in our actual database.
+  - create class `RecipeSerializer`
+    - `serializers.ModelSerializer` They allow us to automatically validate and save things to a specific model that we define in our serialization.
+    - create class `Meta` So this is where we tell the Django rest framework, the model and the fields and any additional arguments that we want to pass to the serialize set and the serialized needs to know which model it's representing and the way it does.
+
+- create a view to use this serializer
+  - head over to `app/recipe/views.py`
+  - override the `get_queryset` method to make sure the recipes retrived by the api are filtered down by the authenticated user
+  - 
+- wire up an url to this view(the reverse url we set in the test)
+  - create `app/recipe/urls.py`, set reverse mapping. any request that gets passed to that URL is going to be handled by the view that we defined here.
+  - head over to `app/app/urls.py`, connect the view in our main app
+- run the test, it shoul pass
 
 
 ## Build Recipe Detail API
-
+### Write test for Recipe detail API
 
 
 ## Build Recipe Creating API
