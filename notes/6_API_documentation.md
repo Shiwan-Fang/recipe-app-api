@@ -77,8 +77,13 @@ So now that we have installed drf spectacular into our project and set up the co
    2. add two urls
       - link `api/schema/` generate the schema for our api, it'a a yaml file
       - link `api/docs/` serve the swagger documentation that is going to use our schema to generate a graphical user interface for our API documentation.
-2. check check urls
+2. test urls
     1. run `docker-compose up`
     2. go to http://127.0.0.1:8000/api/docs/, you should see:
         ![image](images/15_swagger_docs.png)
     
+
+## Summary
+- Learned about API documentation
+- Implemented Swagger and OpenAPI schema
+- Tested documentation

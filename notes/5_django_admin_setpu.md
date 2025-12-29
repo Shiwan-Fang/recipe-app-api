@@ -27,7 +27,7 @@
 2. import:
    - `from django.test import TestCase` → base class for tests
    - `from django.contrib.auth import get_user_model` → helper function to get the default user model
-   - `from django.urls import reverse` → 
+   - `from django.urls import reverse` → can be used to return an absolute path reference
    - `from django.test import Client` → django test client that allows to make http requests
 3. Create methods `setUp` and `test_users_list` in class `AdminSiteTests`.
    1. the class checkes:
