@@ -10,7 +10,7 @@
 - user/token/
   - POST, creatw new token
 - user/me/
-  - PUR/PATCH, update profile
+  - PUT/PATCH, update/paitial update profile
   - GET, view profile
 
 
@@ -190,3 +190,40 @@
   - overwrite the `get_object`, reriving the user that attached to the request
 - define the user/me api in `/app/user/urls.py`
 - Run `docker-compose run --rm app sh -c "python manage.py test"`, it should be passes
+
+
+## Test the whole user API in browser
+- run `docker-compose up`
+- head over to http://127.0.0.1:8000/api/docs/#/
+
+    ![image](images/17_api_page.png)
+- collapse user POST, click "try it out", click to drop down and change it to form data. create a new user and then execute it. Here is the response
+  
+  ![image](images/18_create_user_response.png)
+
+- go to POST token, click "try it out". rigister with the user we just created and then execute, you will get a token you can use to authenticate. Here is the response
+
+  ![image](images/19_copy_token_response.png)
+  
+- copy the token, click "authorize" on top of the page's right side, type in the following string and execute. It will set a authentication header of every request we made.
+    ```python
+    f"Token {the token we just copied}"
+    ```
+
+    ![image](images/20_token_auth.png)
+
+- Go to GET me api, click "try it out" and "execute". It will return the user details that we just created.
+    
+    ![image](images/21_get_auth_user.png)
+
+- In user/me API. PUT means it's going to replace the entire user object with everything(name, email and password). PATCH is useful if you just want to provide specific values to change.
+- Test PATCH by only changing the user name. If you go back to GET user/me, you will also see the updated name.
+
+  ![image](images/22_patch_name.png)
+  ![image](images/23_patch_response.png)
+
+
+## Folder Structure
+- `serializers.py`: Defines how user data is converted (JSON <-> Python <-> DB)
+- `views.py`: Defines what operations are allowed (GET, POST, PATCH, DELETE)
+- `urls.py`: Routes URL paths(only under the app users) to views
