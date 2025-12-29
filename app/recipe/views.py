@@ -11,7 +11,7 @@ from recipe import serializers
 
 class RecipeViewSet(viewsets.ModelViewSet):
     """View for manage recipe APIs."""
-    serializer_class = serializers.RecipeSerializer
+    serializer_class = serializers.RecipeDetailSerializer
     # the query set of objects that is going to be manageable through this API
     queryset = Recipe.objects.all()
     authentication_classes = [TokenAuthentication]
@@ -20,3 +20,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Return recipes for the authenticated user only."""
         return self.queryset.filter(user=self.request.user).order_by('-id')
+
+    def get_serializer_class(self):
+        """Return appropriate serializer class."""
+        if self.action == 'list':
+            return serializers.RecipeSerializer
+
+        return self.serializer_class

@@ -121,13 +121,19 @@ create `test_recipe_api.py`.
 
 ### Implement Recipe Listing API
 - create `app/recipe/serializers.py`
-  - import `from rest_framework import serializers`, serializer is simply a way to convert objects to and from python objects. It takes a json input that might be posted from the API and validates the input to make sure it is secure and correct as part of validation rules. And then it converts it to either a python object that we can use or a model in our actual database.
+  - import `from rest_framework import serializers`, serializer is simply a way to convert objects **to and from** python objects. It takes a json input that might be posted from the API and validates the input to make sure it is secure and correct as part of validation rules. And then it converts it to either a python object that we can use or a model in our actual database.
+
+    ![image](images/25_serializer.png)
+
   - create class `RecipeSerializer`
     - `serializers.ModelSerializer` They allow us to automatically validate and save things to a specific model that we define in our serialization.
     - create class `Meta` So this is where we tell the Django rest framework, the model and the fields and any additional arguments that we want to pass to the serialize set and the serialized needs to know which model it's representing and the way it does.
 
 - create a view to use this serializer
   - head over to `app/recipe/views.py`
+  - import
+    - `viewsets.ModelViewSet` gives you all CRUD API methods automatically: GET /recipes/ → list, GET /recipes/{id}/ → retrieve, POST /recipes/ → create, PATCH/PUT /recipes/{id}/ → update, DELETE /recipes/{id}/ → delete. You didn’t manually write functions.
+  - `queryset = Recipe.objects.all()` defines the base dataset the view will work with.
   - override the `get_queryset` method to make sure the recipes retrived by the api are filtered down by the authenticated user
   - 
 - wire up an url to this view(the reverse url we set in the test)

@@ -67,7 +67,7 @@
 
 ### Implement create user API
 - create `app/user/serializers.py`
-  - import `from rest_framework import serializers`, serializer is simply a way to convert objects to and from python objects. It takes a json input that might be posted from the API and validates the input to make sure it is secure and correct as part of validation rules. And then it converts it to either a python object that we can use or a model in our actual database.
+  - import `from rest_framework import serializers`, serializer is simply a way to convert objects **to and from** python objects. It takes a json input that might be posted from the API and validates the input to make sure it is secure and correct as part of validation rules. And then it converts it to either a python object that we can use or a model in our actual database.
   - create class `UserSerializer`
     - `serializers.ModelSerializer` They allow us to automatically validate and save things to a specific model that we define in our serialization.
     - create class `Meta` So this is where we tell the Django rest framework, the model and the fields and any additional arguments that we want to pass to the serialize set and the serialized needs to know which model it's representing and the way it does. is_active and is_staff are not set here, since it can only be modified by admin.
