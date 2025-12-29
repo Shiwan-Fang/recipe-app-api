@@ -184,4 +184,22 @@ create `test_recipe_api.py`.
 override `perform_create`, so when create a new recipe, DRF will not only save the new recipe using the fields sent in the API request body(like 'id', 'title', 'time_minutes', 'price', 'link'), but also save the user who created it.
 Recipe(title="Carbonara", time_minutes=20, price=10.00) -> Recipe(title="Carbonara", time_minutes=20, price=10.00, user=<logged-in-user>)
 
+
+## Add additional tests
+`test_recipe_api.py`
+- create a helper method `create_user`, refatoring the rest code.
+- create `test_partial_update`, test the patch method
+- create `test_full_update`, test the put method
+- create `test_update_user_returns_error`, security check, check the user id of the recipe can not be changed 
+- `test_delete_recipe`, test the delete method
+- `test_delete_other_user_recipe_error`
+
 ## Test recipe API in browser
+- ensure the migrations are applied
+- http://127.0.0.1:8000/api/docs/#/
+  
+  ![image](images/26_browser.png)
+
+- go to POST user to create a new user and then head over to POST token to create authentication first
+- click authentication to log in
+- check if we are authenticated by go to Get me 
