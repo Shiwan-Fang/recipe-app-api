@@ -139,16 +139,49 @@ create `test_recipe_api.py`.
 - wire up an url to this view(the reverse url we set in the test)
   - create `app/recipe/urls.py`, set reverse mapping. any request that gets passed to that URL is going to be handled by the view that we defined here.
   - head over to `app/app/urls.py`, connect the view in our main app
-- run the test, it shoul pass
+- run the test, it should pass
 
 
 ## Build Recipe Detail API
+
 ### Write test for Recipe detail API
+`test_recipe_api.py`
+- create `detail_url` using reverse, set the specific recipe id
+- create `test_get_recipe_detail`
+  - create a recipe
+  - get the url by using the recipe's id
+  - get the response obj
+  - serialize the recipe data from db
+  - check
+- run `docker-compose run --rm app sh -c "python manage.py test"`, it should be failed
+
+### Implement Recipe Creating API
+`app/recipe/serializers.py`
+- create `RecipeDetailSerializer` using `RecipeSerializer` as the base class
+- add "discription" to the fields.
+
+`app/recipe/views.py`
+- modify `serializer_class` to `serializers.RecipeDetailSerializer`, make it as default serializer. Because most of the methods(update, delete, create) except for listing are using detailed serializer.
+- override `get_serializer_class` 
+
+- run the test.
 
 
-## Build Recipe Creating API
+## Build Recipe Create API
+### Write test for Recipe Create API
+`test_recipe_api.py`
+- create `test_create_recipe`
+  - create a payload and pass it to the endpoint (not using the create_recipe method, it create from the db)
+  - check the response code
+  - retrive the specific recipe from the db with the id from the payload
+  - check each attribute
+  - check the user assigned to the api matches the user we authenticated with
+- run `docker-compose run --rm app sh -c "python manage.py test"`, it should be failed
 
+### Implement Recipe Create API
+`app/recipe/views.py`
 
+override `perform_create`, so when create a new recipe, DRF will not only save the new recipe using the fields sent in the API request body(like 'id', 'title', 'time_minutes', 'price', 'link'), but also save the user who created it.
+Recipe(title="Carbonara", time_minutes=20, price=10.00) -> Recipe(title="Carbonara", time_minutes=20, price=10.00, user=<logged-in-user>)
 
 ## Test recipe API in browser
-
