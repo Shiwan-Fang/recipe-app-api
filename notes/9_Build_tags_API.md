@@ -1,3 +1,7 @@
+**TO BE REVISITED**
+- mixins in views.py
+- the difference between viewsets.ModelViewSet and viewsets.GenericViewSet. and why apply different view set in recipe and tag views
+
 ## Tags API Design
 **In this section**
 - add ability to add recipe tags
@@ -36,3 +40,15 @@
 - add the recipe in `core/admin`, make sure the new tag model is managable through our django admin interface
 - create the migrations by running `docker-compose run --rm app sh -c "python manage.py makemigrations"`
 - run the test, it should pass.
+
+
+## Build tag listing API
+### write test
+create `app/recipe/tests/test_tags_api.py`
+
+### Implement
+`app/recipe/serializers.py`
+`app/recipe/views.py`
+`app/recipe/urls.py`
+
+same logic as writing recipe listing api.
