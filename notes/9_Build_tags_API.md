@@ -52,3 +52,14 @@ create `app/recipe/tests/test_tags_api.py`
 `app/recipe/urls.py`
 
 same logic as writing recipe listing api.
+
+
+## Build tag updating(patch) API
+### write test
+create `app/recipe/tests/test_tags_api.py`
+
+### Implement
+`app/recipe/views.py`
+the test will pass by simply add a new base class `mixins.UpdateModelMixin`
+
+same logic as writing recipe update api.
