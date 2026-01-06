@@ -63,3 +63,14 @@ create `app/recipe/tests/test_tags_api.py`
 the test will pass by simply add a new base class `mixins.UpdateModelMixin`
 
 same logic as writing recipe update api.
+
+
+## Build tag deleting API
+### write test
+create `app/recipe/tests/test_tags_api.py`
+
+### Implement
+`app/recipe/views.py`
+the test will pass by simply add a new base class `mixins.DestroyModelMixin`
+
+same logic as writing recipe delete api.
