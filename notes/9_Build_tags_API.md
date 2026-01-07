@@ -2,6 +2,7 @@
 - mixins in views.py
 - the difference between viewsets.ModelViewSet and viewsets.GenericViewSet. and why apply different view set in recipe and tag views
 - getting to know more about DRF
+- why there is no need to do `recipe.refresh_from_db()` in updating tags feature
 
 ## Tags API Design
 **In this section**
@@ -77,7 +78,7 @@ the test will pass by simply add a new base class `mixins.DestroyModelMixin`
 same logic as writing recipe delete api.
 
 
-## Build creating tags API
+## Build creating tags feature
 ### Nested serilizers
 nestes serilizers will be used in this part.
 **What are nested serilizers?**
@@ -104,3 +105,28 @@ assign the tag serializer as a nested serializer to our recipe serializer
   3. Identifying the Authenticated User
   4. process each tag. For every tag: The system checks if a tag with the same name already exists for the user. If it exists, it is reused. If it does not exist, it is created
   5. return the fully created recipe (with tags attached). DRF then: serializes the recipe, sends it back as the API response
+
+
+## Build updating tags feature
+### write test
+create test in `app/recipe/tests/test_recipe_api.py`. In this test, we are gonna check if we update a recipe, but the tag we updated doesn't exist, we will update the tag in the system.
+Attention: we are using different urls when trying to call diferent methods below.
+```
+GET    /recipes/        → list()
+POST   /recipes/        → create()
+
+GET    /recipes/<id>/   → retrieve()
+PATCH  /recipes/<id>/   → partial_update()
+PUT    /recipes/<id>/   → update()
+DELETE /recipes/<id>/   → destroy()
+```
+why there is no need to do `recipe.refresh_from_db()` here???
+
+`test_update_recipe_assign_tag`. create a recipe with breakfast tag, update it with a lunch tag. And then check if the lunch tag is in that recipe and the breakfast tag has been removed.
+
+`test_clear_recipe_tags`
+
+### Implement
+`app/recipe/serializers.py`
+- Override `update` method
+- Refactor `create` method
